@@ -18,6 +18,13 @@ const buttons = document.querySelectorAll("#buttons-container button")
         this.updateScreen()
     }
     processOperation(operation){
+        if(this.currentOperationText.innerText === "" && operation !== "C"){
+            if(this.previousOperationText.innerText !== ""){
+                this.changeOperation()
+            }
+            return
+        }
+
         let operationValue
         const previous = +this.previousOperationText.innerText.split(" ")[0]
         const current = +this.currentOperationText.innerText
@@ -26,6 +33,30 @@ const buttons = document.querySelectorAll("#buttons-container button")
             case "+":
                 operationValue = previous + current
                 this.updateScreen(operationValue,operation,current,previous)
+                break
+             case "-":
+                operationValue = previous - current
+                this.updateScreen(operationValue,operation,current,previous)
+                break
+             case "*":
+                operationValue = previous * current
+                this.updateScreen(operationValue,operation,current,previous)
+                break
+             case "/":
+                operationValue = previous / current
+                this.updateScreen(operationValue,operation,current,previous)
+                break
+            case "DEL":
+                this.processDelOperator()
+                break
+            case "CE":
+                this.processClearCurrentOperation()
+                break
+            case "C":
+                this.processClearOperation()
+                break
+            case "=":
+                this.processEqualOperator()
                 break
             default:
                 return
@@ -43,6 +74,29 @@ const buttons = document.querySelectorAll("#buttons-container button")
         this.previousOperationText.innerText = `${operationValue} ${operation}`
         this.currentOperationText.innerText = ""
        }
+    }
+    changeOperation(operation){
+        const mathOperations = ["*","/","+","-",]
+
+        if(!mathOperations.includes(operation)){
+            return
+        }
+        this.previousOperationText.innerText = this.previousOperationText.innerText.slice(0, -1)
+    }
+    processDelOperator(){
+        this.currentOperationText.innerText = this.currentOperationText.innerText.slice(0,-1)
+    }
+    processClearCurrentOperation(){
+        this.currentOperationText.innerText = ""
+    }
+
+    processClearOperation(){
+        this.currentOperationText.innerText = ""
+        this.previousOperationText.innerText = ""
+    }
+    processEqualOperator(){
+        const operation = previousOperationText.innerText.split(" ")[1]
+        this.processOperation(operation)
     }
  }
 
